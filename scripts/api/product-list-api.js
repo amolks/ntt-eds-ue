@@ -1,5 +1,10 @@
 import fetchJson from './fetch-json.js';
 import { toSafeSameOriginFetchUrl } from './search-api.js';
+import {
+  sortProductsClientSide,
+  toGraphqlSortInput,
+  getDefaultSortKey,
+} from './product-list-sort.js';
 
 const DEFAULT_MOCK_ENDPOINT = '/drafts/mock-product-list.json';
 
@@ -14,8 +19,8 @@ export const GRAPHQL_REQUEST_HEADERS = [
 ];
 
 export const PRODUCTS_QUERY = `
-  query GetProducts($pageSize: Int!) {
-    products(search: "", pageSize: $pageSize) {
+  query GetProducts($pageSize: Int!, $sort: ProductAttributeSortInput) {
+    products(search: "", pageSize: $pageSize, sort: $sort) {
       items {
         id
         name
@@ -196,7 +201,10 @@ function isCrossOriginUrl(url) {
 }
 
 function parseGraphqlResponse(json) {
-  if (!json || json?.errors?.length) return null;
+  if (!json) return null;
+  if (json?.errors?.length) {
+    return { errors: json.errors };
+  }
   return json;
 }
 
@@ -232,7 +240,9 @@ async function postGraphqlViaAppBuilderProxy(proxyEndpoint, query, variables, co
 
   const json = await response.json();
   const payload = json?.body ?? json;
-  if (payload?.errors?.length) return null;
+  if (payload?.errors?.length) {
+    return { errors: payload.errors };
+  }
 
   if (payload?.products) {
     return { data: payload };
@@ -332,6 +342,11 @@ export function normalizeProduct(item) {
 
   const price = item.price_range?.minimum_price?.final_price;
   const imageUrl = sanitizeUrl(item.small_image?.url);
+  const priceValue = price?.value != null ? Number(price.value) : null;
+  const brandLabel = sanitizeText(
+    item.brand?.label || item.brand || '',
+    200,
+  );
 
   return {
     id: sanitizeText(item.id, 64),
@@ -341,6 +356,8 @@ export function normalizeProduct(item) {
     imageUrl,
     imageAlt: sanitizeText(item.name, 200),
     priceLabel: formatPrice(price),
+    priceValue: Number.isFinite(priceValue) ? priceValue : null,
+    brandLabel,
   };
 }
 
@@ -362,31 +379,51 @@ export function extractProducts(data) {
 /**
  * Fetches products from API Mesh GraphQL.
  * @param {object} config product list configuration
- * @returns {Promise<{ items: object[], totalCount: number, source: string }|null>}
+ * @param {string} [sortKey] sort key
+ * @returns {Promise<{
+ *   items: object[],
+ *   totalCount: number,
+ *   source: string,
+ *   sortWarning?: string
+ * }|null>}
  */
-export async function fetchProducts(config) {
-  const data = await executeGraphqlQuery(
+export async function fetchProducts(config, sortKey = getDefaultSortKey()) {
+  const sort = toGraphqlSortInput(sortKey);
+  let data = await executeGraphqlQuery(
     config,
     PRODUCTS_QUERY,
-    { pageSize: config.pageSize },
+    { pageSize: config.pageSize, sort },
   );
 
-  if (!data) return null;
+  let sortWarning;
+  if (data?.errors?.length && sortKey === 'brand') {
+    sortWarning = 'Brand sort is unavailable; showing products sorted by name.';
+    data = await executeGraphqlQuery(
+      config,
+      PRODUCTS_QUERY,
+      { pageSize: config.pageSize, sort: toGraphqlSortInput('name') },
+    );
+  }
+
+  if (!data || data?.errors?.length) return null;
 
   const { items, totalCount } = extractProducts(data);
   if (!items.length) return null;
 
   const source = resolveEffectiveGraphqlProxy(config) ? 'proxy' : 'graphql';
 
-  return { items, totalCount, source };
+  return {
+    items, totalCount, source, sortWarning,
+  };
 }
 
 /**
  * Fetches products from a same-origin mock JSON endpoint.
  * @param {string} mockEndpoint mock API URL
+ * @param {string} [sortKey] sort key
  * @returns {Promise<{ items: object[], totalCount: number, source: string }|null>}
  */
-export async function fetchProductsFromMock(mockEndpoint) {
+export async function fetchProductsFromMock(mockEndpoint, sortKey = getDefaultSortKey()) {
   const safeEndpoint = toSafeMockEndpoint(mockEndpoint);
   if (!safeEndpoint) return null;
 
@@ -396,21 +433,31 @@ export async function fetchProductsFromMock(mockEndpoint) {
   const { items, totalCount } = extractProducts(data);
   if (!items.length) return null;
 
-  return { items, totalCount, source: 'mock' };
+  return {
+    items: sortProductsClientSide(items, sortKey),
+    totalCount,
+    source: 'mock',
+  };
 }
 
 /**
  * Loads products from GraphQL with localhost mock fallback.
  * @param {object} config product list configuration
- * @returns {Promise<{ items: object[], totalCount: number, source: string }|null>}
+ * @param {string} [sortKey] sort key
+ * @returns {Promise<{
+ *   items: object[],
+ *   totalCount: number,
+ *   source: string,
+ *   sortWarning?: string
+ * }|null>}
  */
-export async function loadProducts(config) {
-  const graphqlResult = await fetchProducts(config);
+export async function loadProducts(config, sortKey = getDefaultSortKey()) {
+  const graphqlResult = await fetchProducts(config, sortKey);
   if (graphqlResult) return graphqlResult;
 
   const mockEndpoint = config.mockApiEndpoint || DEFAULT_MOCK_ENDPOINT;
   if (window.location.hostname.includes('localhost')) {
-    return fetchProductsFromMock(mockEndpoint);
+    return fetchProductsFromMock(mockEndpoint, sortKey);
   }
 
   return null;
