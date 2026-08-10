@@ -6,20 +6,13 @@
 
 // eslint-disable-next-line import/no-cycle
 import {
+  decorateFragment,
   decorateMain,
 } from '../../scripts/scripts.js';
 
 import {
   loadSections,
 } from '../../scripts/aem.js';
-
-/**
- * @returns {boolean} True when running on the local AEM dev server
- */
-export function isLocalDev() {
-  const { hostname } = window.location;
-  return hostname === 'localhost' || hostname === '127.0.0.1';
-}
 
 /**
  * Normalize a fragment path from metadata or author input.
@@ -56,11 +49,10 @@ export async function resolveFragmentPath(metaValue, fragmentName) {
   }
 
   const { pathname } = window.location;
-  const localPath = `/drafts/${fragmentName}`;
   const candidates = [];
 
-  if (pathname.startsWith('/drafts') || isLocalDev()) {
-    candidates.push(localPath);
+  if (pathname.startsWith('/drafts')) {
+    candidates.push(`/drafts/${fragmentName}`);
   }
 
   const segments = pathname.split('/').filter(Boolean);
@@ -76,15 +68,17 @@ export async function resolveFragmentPath(metaValue, fragmentName) {
 
   const resolved = checks.find(Boolean);
   if (resolved) return resolved;
-  return isLocalDev() ? localPath : `/${fragmentName}`;
+  return `/${fragmentName}`;
 }
 
 /**
  * Loads a fragment.
  * @param {string} path The path to the fragment
- * @returns {HTMLElement} The root element of the fragment
+ * @param {object} [options] Load options
+ * @param {boolean} [options.blocksOnly] Skip section decoration (for header/footer fragments)
+ * @returns {Promise<HTMLElement|null>} The root element of the fragment
  */
-export async function loadFragment(path) {
+export async function loadFragment(path, options = {}) {
   if (path && path.startsWith('/') && !path.startsWith('//')) {
     // eslint-disable-next-line no-param-reassign
     path = path.replace(/(\.plain)?\.html/, '');
@@ -102,7 +96,11 @@ export async function loadFragment(path) {
       resetAttributeBase('img', 'src');
       resetAttributeBase('source', 'srcset');
 
-      decorateMain(main);
+      if (options.blocksOnly) {
+        decorateFragment(main);
+      } else {
+        decorateMain(main);
+      }
       await loadSections(main);
       return main;
     }

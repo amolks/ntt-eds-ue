@@ -45,7 +45,7 @@ async function resolveFooterPath(footerMeta) {
 export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
   const footerPath = await resolveFragmentPath(footerMeta, 'footer');
-  const fragment = await loadFragment(footerPath);
+  const fragment = await loadFragment(footerPath, { blocksOnly: true });
 
   block.textContent = '';
 

@@ -125,6 +125,19 @@ export function decorateMain(main) {
 }
 
 /**
+ * Decorates a header/footer fragment without section wrappers.
+ * Section decoration hides content (display: none) until loadSection runs,
+ * which breaks nav/footer fragments that are mounted outside the page main.
+ * @param {Element} main The fragment root element
+ */
+export function decorateFragment(main) {
+  decorateIcons(main);
+  buildAutoBlocks(main);
+  decorateBlocks(main);
+  decorateButtons(main);
+}
+
+/**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
  */
