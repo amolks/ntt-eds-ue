@@ -1,0 +1,109 @@
+{
+  "definitions": [
+    {
+      "title": "Product List",
+      "id": "product-list",
+      "model": "product-list",
+      "plugins": {
+        "da": {
+          "name": "product-list",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            { "name": "heading", "selector": "div>div>p" },
+            { "name": "meshId", "selector": "div>div>p" },
+            { "name": "graphqlEndpoint", "selector": "div>div>p" },
+            { "name": "graphqlProxyEndpoint", "selector": "div>div>p" },
+            { "name": "graphqlApiKey", "selector": "div>div>p" },
+            { "name": "pageSize", "selector": "div>div>p" },
+            { "name": "minPrice", "selector": "div>div>p" },
+            { "name": "maxPrice", "selector": "div>div>p" },
+            { "name": "categoryId", "selector": "div>div>p" },
+            { "name": "mockApiEndpoint", "selector": "div>div>p" },
+            { "name": "productDetailPageUrl", "selector": "div>div>a" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "product-list",
+      "fields": [
+        {
+          "component": "text",
+          "name": "heading",
+          "label": "Heading",
+          "valueType": "string",
+          "value": "Products"
+        },
+        {
+          "component": "text",
+          "name": "meshId",
+          "label": "API Mesh ID",
+          "valueType": "string",
+          "value": "b214abfa-ec45-403d-8623-72af08f32293"
+        },
+        {
+          "component": "text",
+          "name": "graphqlEndpoint",
+          "label": "GraphQL Endpoint",
+          "valueType": "string",
+          "value": "https://edge-sandbox-graph.adobe.io/api/b214abfa-ec45-403d-8623-72af08f32293/graphql"
+        },
+        {
+          "component": "text",
+          "name": "graphqlProxyEndpoint",
+          "label": "GraphQL Proxy Endpoint",
+          "valueType": "string",
+          "value": "https://120642-edsapi-stage.adobeio-static.net/api/v1/web/api-mesh/api-mesh-graphql"
+        },
+        {
+          "component": "text",
+          "name": "graphqlApiKey",
+          "label": "GraphQL API Key",
+          "valueType": "string"
+        },
+        {
+          "component": "number",
+          "name": "pageSize",
+          "label": "Products to Display",
+          "valueType": "number",
+          "value": 12
+        },
+        {
+          "component": "number",
+          "name": "minPrice",
+          "label": "Default Min Price",
+          "valueType": "number"
+        },
+        {
+          "component": "number",
+          "name": "maxPrice",
+          "label": "Default Max Price",
+          "valueType": "number"
+        },
+        {
+          "component": "text",
+          "name": "categoryId",
+          "label": "Category ID",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "mockApiEndpoint",
+          "label": "Mock API Endpoint",
+          "valueType": "string",
+          "value": "/drafts/mock-product-list.json"
+        },
+        {
+          "component": "aem-content",
+          "name": "productDetailPageUrl",
+          "label": "Product Detail Page",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

@@ -9,6 +9,7 @@ import {
 } from './aem.js';
 import { decorateRichtext } from './editor-support-rte.js';
 import decorateTitlesWithMargin from './title-with-margin.js';
+import decorateContentStackSections, { initContentStackSectionAuthoring } from './content-stack-section.js';
 import { decorateButtons, decorateMain } from './scripts.js';
 
 let promiseChanges$ = Promise.resolve();
@@ -80,6 +81,7 @@ async function applyChanges(event) {
           decorateIcons(newSection);
           decorateRichtext(newSection);
           decorateSections(parentElement);
+          decorateContentStackSections(parentElement);
           decorateBlocks(parentElement);
           await loadSections(parentElement);
           element.remove();
@@ -89,6 +91,7 @@ async function applyChanges(event) {
           decorateButtons(parentElement);
           decorateIcons(parentElement);
           decorateTitlesWithMargin(parentElement);
+          decorateContentStackSections(parentElement);
           decorateRichtext(parentElement);
         }
         return true;
@@ -116,6 +119,7 @@ function attachEventListeners(main) {
 }
 
 attachEventListeners(document.querySelector('main'));
+initContentStackSectionAuthoring(document.querySelector('main'));
 
 // decorate rich text
 // this has to happen after decorateMain(), and everythime decorateBlocks() is called

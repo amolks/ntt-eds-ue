@@ -73,6 +73,27 @@
                   "model": "section"
                 }
               }
+            },
+            "da": {
+              "unsafeHTML": "<div></div>"
+            }
+          },
+          "model": "section",
+          "filter": "section"
+        },
+        {
+          "title": "Content Stack Section",
+          "id": "content-stack-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section",
+                "template": {
+                  "name": "Content Stack Section",
+                  "model": "content-stack-section",
+                  "filter": "content-stack-section"
+                }
+              }
             }
           }
         }
@@ -144,6 +165,35 @@
           }
         },
         {
+          "title": "CF Teaser Selector",
+          "id": "cf-teaser-selector",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "CF Teaser Selector",
+                  "model": "cf-teaser-selector"
+                }
+              }
+            },
+            "da": {
+              "unsafeHTML": "<div class=\"cf-teaser-selector\"><div><div><a href=\"\"></a></div></div><div><div><p></p></div></div></div>",
+              "fields": [
+                {
+                  "name": "cfpath",
+                  "selector": "div:nth-child(1)>div>a"
+                },
+                {
+                  "name": "contentFragmentVariation",
+                  "selector": "div:nth-child(2)>div>p"
+                }
+              ]
+            }
+          },
+          "model": "cf-teaser-selector"
+        },
+        {
           "title": "Columns",
           "id": "columns",
           "plugins": {
@@ -174,6 +224,38 @@
           }
         },
         {
+          "title": "Custom Tiles",
+          "id": "custom-tiles",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Custom Tiles",
+                  "filter": "custom-tiles",
+                  "model": "custom-tiles"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Custom Tile",
+          "id": "custom-tile",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Custom Tile",
+                  "model": "custom-tile",
+                  "titleType": "h3"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Feature Card",
           "id": "feature-card",
           "plugins": {
@@ -184,6 +266,43 @@
                   "name": "Feature Card",
                   "model": "feature-card",
                   "titleType": "h1"
+                }
+              }
+            },
+            "da": {
+              "unsafeHTML": "<div class=\"feature-card\"><div><h1></h1></div><div><p></p></div><div><p></p></div><div><a href=\"\"></a></div></div>",
+              "fields": [
+                {
+                  "name": "title",
+                  "selector": "div:nth-child(1)>h1"
+                },
+                {
+                  "name": "description",
+                  "selector": "div:nth-child(2)>p"
+                },
+                {
+                  "name": "linkText",
+                  "selector": "div:nth-child(3)>p"
+                },
+                {
+                  "name": "link",
+                  "selector": "div:nth-child(4)>a[href]"
+                }
+              ]
+            }
+          },
+          "model": "feature-card"
+        },
+        {
+          "title": "Footer Bottom",
+          "id": "footer-bottom",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Footer Bottom",
+                  "model": "footer-bottom"
                 }
               }
             }
@@ -198,7 +317,8 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Footer Site",
-                  "filter": "footer-site"
+                  "filter": "footer-site",
+                  "model": "footer-site"
                 }
               }
             }
@@ -215,6 +335,21 @@
                   "name": "Footer Nav Column",
                   "model": "footer-nav-column",
                   "titleType": "h3"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer Top",
+          "id": "footer-top",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Footer Top",
+                  "model": "footer-top"
                 }
               }
             }
@@ -311,6 +446,154 @@
           }
         },
         {
+          "title": "Package Tracking",
+          "id": "package-tracking",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Package Tracking",
+                  "model": "package-tracking",
+                  "key-value": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Product Details",
+          "id": "product-details",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Product Details",
+                  "model": "product-details",
+                  "key-value": true
+                }
+              }
+            },
+            "da": {
+              "name": "product-details",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "meshId",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "graphqlEndpoint",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "productDetailProxyEndpoint",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "graphqlApiKey",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "skuQueryParam",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "mockApiEndpoint",
+                  "selector": "div>div>p"
+                }
+              ]
+            }
+          },
+          "model": "product-details"
+        },
+        {
+          "title": "Product List",
+          "id": "product-list",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Product List",
+                  "model": "product-list",
+                  "key-value": true
+                }
+              }
+            },
+            "da": {
+              "name": "product-list",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "heading",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "meshId",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "graphqlEndpoint",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "graphqlProxyEndpoint",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "graphqlApiKey",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "pageSize",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "minPrice",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "maxPrice",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "categoryId",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "mockApiEndpoint",
+                  "selector": "div>div>p"
+                },
+                {
+                  "name": "productDetailPageUrl",
+                  "selector": "div>div>a"
+                }
+              ]
+            }
+          },
+          "model": "product-list"
+        },
+        {
+          "title": "Search",
+          "id": "search",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Search",
+                  "model": "search",
+                  "key-value": true
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Spotlight",
           "id": "spotlight",
           "plugins": {
@@ -380,7 +663,8 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Tiles",
-                  "filter": "tiles"
+                  "filter": "tiles",
+                  "model": "tiles"
                 }
               }
             }
@@ -399,7 +683,8 @@
                   "classes": [
                     "light"
                   ],
-                  "text": "<h3>Title</h3><p>Description</p><p><a href=\"#\">Learn more</a></p>"
+                  "content_titleType": "h3",
+                  "linkType": "_self"
                 }
               }
             }

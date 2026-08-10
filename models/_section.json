@@ -58,13 +58,21 @@
         "feature-card",
         "card-grid-with-image",
         "cards",
+        "custom-tiles",
         "tiles",
         "spotlight",
         "stats",
         "columns",
         "fragment",
         "connect-cta",
-        "footer-site"
+        "search",
+        "package-tracking",
+        "cf-teaser-selector",
+        "product-list",
+        "product-details",
+        "footer-top",
+        "footer-site",
+        "footer-bottom"
       ]
     }
   ]

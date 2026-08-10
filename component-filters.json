@@ -21,19 +21,34 @@
       "feature-card",
       "card-grid-with-image",
       "cards",
+      "custom-tiles",
       "tiles",
       "spotlight",
       "stats",
       "columns",
       "fragment",
       "connect-cta",
-      "footer-site"
+      "search",
+      "package-tracking",
+      "cf-teaser-selector",
+      "product-list",
+      "product-details",
+      "footer-top",
+      "footer-site",
+      "footer-bottom"
     ]
   },
   {
     "id": "header-section",
     "components": [
       "navigation"
+    ]
+  },
+  {
+    "id": "content-stack-section",
+    "components": [
+      "title-with-margin",
+      "tiles"
     ]
   },
   {
@@ -61,6 +76,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "custom-tiles",
+    "components": [
+      "custom-tile"
     ]
   },
   {

@@ -160,6 +160,55 @@
     ]
   },
   {
+    "id": "content-stack-section",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Section Name",
+        "description": "The label shown for this section in the Content Tree"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "valueType": "string[]",
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          },
+          {
+            "name": "Navy",
+            "value": "navy"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "layout",
+        "label": "Layout",
+        "valueType": "string[]",
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Layout Center",
+            "value": "layout-center"
+          },
+          {
+            "name": "Layout Left",
+            "value": "layout-left"
+          },
+          {
+            "name": "Layout Right",
+            "value": "layout-right"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "card-grid-with-image-item",
     "fields": [
       {
@@ -211,6 +260,67 @@
     ]
   },
   {
+    "id": "cf-teaser-selector",
+    "fields": [
+      {
+        "component": "aem-content-fragment",
+        "name": "cfpath",
+        "label": "Teaser Content Fragment Path",
+        "variationName": "contentFragmentVariation",
+        "validation": {
+          "rootPath": "/content/dam"
+        }
+      },
+      {
+        "component": "text",
+        "name": "contentFragmentVariation",
+        "hidden": true
+      },
+      {
+        "component": "select",
+        "name": "classes_cta-position",
+        "label": "CTA Position",
+        "options": [
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          },
+          {
+            "name": "Left Center",
+            "value": "left-center"
+          },
+          {
+            "name": "Left Bottom",
+            "value": "left-bottom"
+          },
+          {
+            "name": "Right Bottom",
+            "value": "right-bottom"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "classes_text-color",
+        "label": "Text Color",
+        "options": [
+          {
+            "name": "Bright",
+            "value": "bright"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "columns",
     "fields": [
       {
@@ -251,6 +361,88 @@
         "label": "CTA Label",
         "valueType": "string",
         "value": "Contact Us"
+      }
+    ]
+  },
+  {
+    "id": "custom-tiles",
+    "fields": []
+  },
+  {
+    "id": "custom-tile",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "multi": false
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Type",
+        "valueType": "string",
+        "value": "h3",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "textarea",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "Link Text",
+        "multi": false
       }
     ]
   },
@@ -306,6 +498,126 @@
     ]
   },
   {
+    "id": "footer-bottom",
+    "fields": [
+      {
+        "component": "text",
+        "name": "copyright",
+        "label": "Copyright Text",
+        "valueType": "string",
+        "value": "Copyright © NTT DATA Group Corporation"
+      },
+      {
+        "component": "container",
+        "name": "legalLinks",
+        "label": "Legal Links",
+        "collapsible": false,
+        "multi": true,
+        "fields": [
+          {
+            "component": "text",
+            "name": "label",
+            "label": "Label",
+            "valueType": "string"
+          },
+          {
+            "component": "aem-content",
+            "name": "link",
+            "label": "Link",
+            "valueType": "string"
+          },
+          {
+            "component": "select",
+            "name": "target",
+            "label": "Link Target",
+            "valueType": "string",
+            "value": "_self",
+            "options": [
+              {
+                "name": "Same tab",
+                "value": "_self"
+              },
+              {
+                "name": "New tab",
+                "value": "_blank"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "container",
+        "name": "socialLinks",
+        "label": "Social Links",
+        "collapsible": false,
+        "multi": true,
+        "fields": [
+          {
+            "component": "select",
+            "name": "platform",
+            "label": "Platform",
+            "valueType": "string",
+            "options": [
+              {
+                "name": "X",
+                "value": "x"
+              },
+              {
+                "name": "Instagram",
+                "value": "instagram"
+              },
+              {
+                "name": "LinkedIn",
+                "value": "linkedin"
+              },
+              {
+                "name": "YouTube",
+                "value": "youtube"
+              }
+            ]
+          },
+          {
+            "component": "aem-content",
+            "name": "profileUrl",
+            "label": "Profile URL",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "ariaLabel",
+            "label": "Accessible Label",
+            "valueType": "string"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "footer-site",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logo",
+        "label": "Logo",
+        "multi": false
+      },
+      {
+        "component": "aem-content",
+        "name": "logoLink",
+        "label": "Logo Link",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "logoTitle",
+        "label": "Logo Link Title",
+        "valueType": "string",
+        "value": "NTT DATA Home"
+      }
+    ]
+  },
+  {
     "id": "footer-nav-column",
     "fields": [
       {
@@ -318,6 +630,31 @@
         "component": "aem-content",
         "name": "link",
         "label": "Column Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "footer-top",
+    "fields": [
+      {
+        "component": "text",
+        "name": "text",
+        "label": "Text",
+        "valueType": "string",
+        "value": "Connect with us"
+      },
+      {
+        "component": "text",
+        "name": "ctaText",
+        "label": "CTA Text",
+        "valueType": "string",
+        "value": "Contact Us"
+      },
+      {
+        "component": "aem-content",
+        "name": "cta",
+        "label": "CTA Link",
         "valueType": "string"
       }
     ]
@@ -681,6 +1018,234 @@
     ]
   },
   {
+    "id": "package-tracking",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string",
+        "value": "Track your package"
+      },
+      {
+        "component": "text",
+        "name": "trackingApiEndpoint",
+        "label": "Tracking API Endpoint",
+        "valueType": "string",
+        "description": "Optional same-origin tracking API. Falls back to /drafts/mock-package-tracking.json when empty or unavailable."
+      },
+      {
+        "component": "text",
+        "name": "inputPlaceholder",
+        "label": "Input Placeholder",
+        "valueType": "string",
+        "value": "Enter 12-digit number or waybill (e.g. ABC12345678)"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string",
+        "value": "Track"
+      }
+    ]
+  },
+  {
+    "id": "product-details",
+    "fields": [
+      {
+        "component": "text",
+        "name": "meshId",
+        "label": "API Mesh ID",
+        "valueType": "string",
+        "value": "b214abfa-ec45-403d-8623-72af08f32293",
+        "description": "API Mesh identifier used to build the GraphQL endpoint."
+      },
+      {
+        "component": "text",
+        "name": "graphqlEndpoint",
+        "label": "GraphQL Endpoint",
+        "valueType": "string",
+        "value": "https://edge-sandbox-graph.adobe.io/api/b214abfa-ec45-403d-8623-72af08f32293/graphql",
+        "description": "API Mesh GraphQL URL (server-side). Browser uses Product Detail Proxy Endpoint instead."
+      },
+      {
+        "component": "text",
+        "name": "productDetailProxyEndpoint",
+        "label": "Product Detail Proxy Endpoint",
+        "valueType": "string",
+        "value": "https://120642-edsapi-stage.adobeio-static.net/api/v1/web/api-mesh/api-mesh-product-detail",
+        "description": "App Builder proxy for browser product detail GraphQL requests (CORS-safe)."
+      },
+      {
+        "component": "text",
+        "name": "graphqlApiKey",
+        "label": "GraphQL API Key",
+        "valueType": "string",
+        "description": "Optional x-api-key header for API Mesh requests."
+      },
+      {
+        "component": "text",
+        "name": "skuQueryParam",
+        "label": "SKU Query Parameter",
+        "valueType": "string",
+        "value": "sku",
+        "description": "URL query parameter used to identify the product (for example ?sku=VA02)."
+      },
+      {
+        "component": "text",
+        "name": "mockApiEndpoint",
+        "label": "Mock API Endpoint",
+        "valueType": "string",
+        "value": "/drafts/mock-product-detail.json",
+        "description": "Same-origin mock JSON used on localhost when GraphQL is unavailable."
+      }
+    ]
+  },
+  {
+    "id": "product-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string",
+        "value": "Products"
+      },
+      {
+        "component": "text",
+        "name": "meshId",
+        "label": "API Mesh ID",
+        "valueType": "string",
+        "value": "b214abfa-ec45-403d-8623-72af08f32293",
+        "description": "API Mesh identifier used to build the GraphQL endpoint."
+      },
+      {
+        "component": "text",
+        "name": "graphqlEndpoint",
+        "label": "GraphQL Endpoint",
+        "valueType": "string",
+        "value": "https://edge-sandbox-graph.adobe.io/api/b214abfa-ec45-403d-8623-72af08f32293/graphql",
+        "description": "API Mesh GraphQL URL (server-side). Browser uses GraphQL Proxy Endpoint instead."
+      },
+      {
+        "component": "text",
+        "name": "graphqlProxyEndpoint",
+        "label": "GraphQL Proxy Endpoint",
+        "valueType": "string",
+        "value": "https://120642-edsapi-stage.adobeio-static.net/api/v1/web/api-mesh/api-mesh-graphql",
+        "description": "App Builder proxy for browser requests (CORS-safe). Used automatically when GraphQL Endpoint is API Mesh."
+      },
+      {
+        "component": "text",
+        "name": "graphqlApiKey",
+        "label": "GraphQL API Key",
+        "valueType": "string",
+        "description": "Optional x-api-key header for API Mesh requests. Must be listed in API Mesh CORS allowedHeaders (see config/api-mesh-cors.example.json)."
+      },
+      {
+        "component": "number",
+        "name": "pageSize",
+        "label": "Products to Display",
+        "valueType": "number",
+        "value": 10
+      },
+      {
+        "component": "number",
+        "name": "minPrice",
+        "label": "Default Min Price",
+        "valueType": "number",
+        "description": "Optional initial minimum price filter sent to Venia GraphQL (price.from)."
+      },
+      {
+        "component": "number",
+        "name": "maxPrice",
+        "label": "Default Max Price",
+        "valueType": "number",
+        "description": "Optional initial maximum price filter sent to Venia GraphQL (price.to)."
+      },
+      {
+        "component": "text",
+        "name": "categoryId",
+        "label": "Category ID",
+        "valueType": "string",
+        "description": "Optional Venia category ID scope (category_id.eq) for the product listing and filter aggregations."
+      },
+      {
+        "component": "text",
+        "name": "mockApiEndpoint",
+        "label": "Mock API Endpoint",
+        "valueType": "string",
+        "value": "/drafts/mock-product-list.json",
+        "description": "Same-origin mock JSON used on localhost when GraphQL is unavailable."
+      },
+      {
+        "component": "aem-content",
+        "name": "productDetailPageUrl",
+        "label": "Product Detail Page",
+        "valueType": "string",
+        "description": "Page opened when a product card is clicked. The product SKU is appended as a ?sku= query parameter in a new browser tab."
+      }
+    ]
+  },
+  {
+    "id": "search",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "resultPageUrl",
+        "label": "Search Results Page",
+        "valueType": "string",
+        "description": "Page to navigate to when a search term is selected"
+      },
+      {
+        "component": "text",
+        "name": "queryIndexSource",
+        "label": "Query Index Source",
+        "valueType": "string",
+        "value": "/query-index.json",
+        "description": "JSON index used to render search results on the results page"
+      },
+      {
+        "component": "text",
+        "name": "trendingApiEndpoint",
+        "label": "Trending API Endpoint",
+        "valueType": "string",
+        "description": "API endpoint for trending searches. Trending section is shown only when configured."
+      },
+      {
+        "component": "number",
+        "name": "trendingLimit",
+        "label": "Trending Items Limit",
+        "valueType": "number",
+        "value": 5
+      },
+      {
+        "component": "number",
+        "name": "recentSearchLimit",
+        "label": "Recent Searches Limit",
+        "valueType": "number",
+        "value": 3
+      },
+      {
+        "component": "text",
+        "name": "suggestApiEndpoint",
+        "label": "Autosuggest API Endpoint",
+        "valueType": "string",
+        "value": "https://dummyjson.com/products/search",
+        "description": "Product search API. DummyJSON returns product titles from the products array."
+      },
+      {
+        "component": "text",
+        "name": "searchQueryParam",
+        "label": "Search Query Parameter",
+        "valueType": "string",
+        "value": "q",
+        "description": "URL query parameter name passed to the results page"
+      }
+    ]
+  },
+  {
     "id": "spotlight-card",
     "fields": [
       {
@@ -765,6 +1330,32 @@
     ]
   },
   {
+    "id": "tiles",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Layout variant",
+        "valueType": "string[]",
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Layout Spotlight",
+            "value": "layout-spotlight"
+          },
+          {
+            "name": "Layout Standard",
+            "value": "layout-standard"
+          },
+          {
+            "name": "Layout Compact",
+            "value": "layout-compact"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "tile",
     "fields": [
       {
@@ -775,12 +1366,92 @@
         "multi": false
       },
       {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "content_title",
+        "label": "Title",
         "valueType": "string",
-        "description": "Use a heading for the title, a paragraph for the description, and a link for the CTA."
+        "validation": {
+          "maxLength": 40,
+          "customErrorMsg": "Title must be 40 characters or less."
+        }
+      },
+      {
+        "component": "select",
+        "name": "content_titleType",
+        "label": "Title Type",
+        "valueType": "string",
+        "value": "h3",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "textarea",
+        "name": "content_description",
+        "label": "Description",
+        "valueType": "string",
+        "validation": {
+          "maxLength": 100,
+          "customErrorMsg": "Description must be 100 characters or less."
+        }
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Link Label",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "linkType",
+        "label": "Link Target",
+        "valueType": "string",
+        "value": "_self",
+        "options": [
+          {
+            "name": "Same window",
+            "value": "_self"
+          },
+          {
+            "name": "New tab",
+            "value": "_blank"
+          }
+        ]
       },
       {
         "component": "multiselect",
@@ -808,6 +1479,12 @@
         "component": "text",
         "name": "title",
         "label": "Title"
+      },
+      {
+        "component": "textarea",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
       },
       {
         "component": "select",
