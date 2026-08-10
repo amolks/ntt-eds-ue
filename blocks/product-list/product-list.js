@@ -333,7 +333,12 @@ function renderCatalog(block, config, result, selectedFilters, sortKey, handlers
 }
 
 async function loadAndRenderCatalog(
-  block, config, selectedFilters, sortKey, handlers, isReload = false,
+  block,
+  config,
+  selectedFilters,
+  sortKey,
+  handlers,
+  isReload = false,
 ) {
   if (!isReload) {
     block.replaceChildren(renderStatus('Loading products...'));
