@@ -1,10 +1,15 @@
-import { loadProducts } from '../../scripts/api/product-list-api.js';
+import {
+  buildProductFilter,
+  createEmptySelectedFilters,
+  loadProducts,
+} from '../../scripts/api/product-list-api.js';
 import {
   SORT_OPTIONS,
   getSortKeyFromUrl,
   updateSortInUrl,
 } from '../../scripts/api/product-list-sort.js';
 import readProductListConfig from './product-list-config.js';
+import createFilterSidebar from './product-list-filters.js';
 
 function renderStatus(message, isError = false) {
   const status = document.createElement('p');
@@ -81,15 +86,17 @@ function createProductCard(product, productDetailPageUrl) {
   return card;
 }
 
-function createProductGrid(result, productDetailPageUrl) {
+function createProductGrid(items, productDetailPageUrl) {
   const grid = document.createElement('div');
   grid.className = 'product-list-grid';
   grid.setAttribute('role', 'list');
-  result.items.forEach((product) => {
+
+  items.forEach((product) => {
     const card = createProductCard(product, productDetailPageUrl);
     card.setAttribute('role', 'listitem');
     grid.append(card);
   });
+
   return grid;
 }
 
@@ -244,13 +251,14 @@ function createSortDropdown(currentSortKey, onChange) {
   return control;
 }
 
-function createSortToolbar(currentSortKey, onChange) {
+function createSortToolbar(currentSortKey, totalCount, onChange) {
   const toolbar = document.createElement('div');
   toolbar.className = 'product-list-toolbar';
 
   const meta = document.createElement('p');
   meta.className = 'product-list-meta';
   meta.setAttribute('data-product-list-meta', 'true');
+  meta.textContent = `${totalCount} Item${totalCount === 1 ? '' : 's'}`;
   toolbar.append(meta);
 
   const sortWrap = document.createElement('div');
@@ -261,38 +269,16 @@ function createSortToolbar(currentSortKey, onChange) {
   return toolbar;
 }
 
-function renderProducts(block, heading, result, config, sortKey, onSortChange) {
-  block.replaceChildren();
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'product-list-content';
-
+function createResultsHeader(heading) {
   const header = document.createElement('div');
   header.className = 'product-list-header';
 
   const title = document.createElement('h2');
   title.className = 'product-list-heading';
   title.textContent = heading;
+
   header.append(title);
-
-  const toolbar = createSortToolbar(sortKey, onSortChange);
-  const meta = toolbar.querySelector('[data-product-list-meta]');
-  if (meta) {
-    meta.textContent = `${result.totalCount} products`;
-  }
-
-  if (result.sortWarning) {
-    const warning = document.createElement('p');
-    warning.className = 'product-list-sort-warning';
-    warning.setAttribute('role', 'status');
-    warning.textContent = result.sortWarning;
-    toolbar.prepend(warning);
-  }
-
-  const grid = createProductGrid(result, config.productDetailPageUrl);
-
-  wrapper.append(header, toolbar, grid);
-  block.append(wrapper);
+  return header;
 }
 
 function setGridLoading(block, isLoading) {
@@ -300,6 +286,77 @@ function setGridLoading(block, isLoading) {
   const trigger = block.querySelector('.product-list-sort-trigger');
   if (grid) grid.classList.toggle('is-loading', isLoading);
   if (trigger) trigger.disabled = isLoading;
+}
+
+function renderCatalog(block, config, result, selectedFilters, sortKey, handlers) {
+  block.replaceChildren();
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'product-list-content';
+
+  const layout = document.createElement('div');
+  layout.className = 'product-list-layout';
+
+  const main = document.createElement('div');
+  main.className = 'product-list-main';
+
+  main.append(createResultsHeader(config.heading));
+
+  const toolbar = createSortToolbar(sortKey, result.totalCount, handlers.onSortChange);
+  if (result.sortWarning) {
+    const warning = document.createElement('p');
+    warning.className = 'product-list-sort-warning';
+    warning.setAttribute('role', 'status');
+    warning.textContent = result.sortWarning;
+    toolbar.prepend(warning);
+  }
+  main.append(toolbar);
+
+  if (result.items.length) {
+    main.append(createProductGrid(result.items, config.productDetailPageUrl));
+  } else {
+    main.append(renderStatus('No products match the selected filters.', true));
+  }
+
+  layout.append(
+    createFilterSidebar(
+      result.aggregations,
+      selectedFilters,
+      handlers.onFilterChange,
+      handlers.onClearFilters,
+    ),
+    main,
+  );
+
+  wrapper.append(layout);
+  block.append(wrapper);
+}
+
+async function loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers, isReload = false) {
+  if (!isReload) {
+    block.replaceChildren(renderStatus('Loading products...'));
+  } else {
+    setGridLoading(block, true);
+  }
+
+  try {
+    const productFilter = buildProductFilter(selectedFilters, config);
+    const result = await loadProducts(config, productFilter, sortKey);
+
+    if (!result) {
+      block.replaceChildren(renderStatus(
+        'Unable to load products. Check the GraphQL proxy endpoint and network connection.',
+        true,
+      ));
+      return;
+    }
+
+    renderCatalog(block, config, result, selectedFilters, sortKey, handlers);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('product-list failed to load catalog', error);
+    block.replaceChildren(renderStatus('Unable to load products.', true));
+  }
 }
 
 /**
@@ -312,43 +369,31 @@ export default async function decorate(block) {
   const config = readProductListConfig(block);
   let sortKey = getSortKeyFromUrl();
 
-  block.replaceChildren(renderStatus('Loading products...'));
+  const selectedFilters = createEmptySelectedFilters();
+  if (config.minPrice || config.maxPrice) {
+    selectedFilters.price = {
+      from: config.minPrice || '',
+      to: config.maxPrice || '',
+    };
+  }
 
-  const reloadProducts = async (nextSortKey) => {
-    sortKey = nextSortKey;
-    updateSortInUrl(sortKey);
-    setGridLoading(block, true);
-
-    try {
-      const result = await loadProducts(config, sortKey);
-
-      if (!result?.items?.length) {
-        block.replaceChildren(renderStatus(
-          'Unable to load products. Check the API Mesh GraphQL endpoint and mesh ID.',
-          true,
-        ));
-        return;
-      }
-
-      renderProducts(block, config.heading, result, config, sortKey, reloadProducts);
-    } catch {
-      block.replaceChildren(renderStatus('Unable to load products.', true));
-    }
+  const handlers = {
+    onFilterChange: (nextFilters) => {
+      selectedFilters.attributes = nextFilters.attributes;
+      selectedFilters.price = nextFilters.price;
+      loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers, true);
+    },
+    onClearFilters: () => {
+      selectedFilters.attributes = {};
+      selectedFilters.price = { from: '', to: '' };
+      loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers, true);
+    },
+    onSortChange: (nextSortKey) => {
+      sortKey = nextSortKey;
+      updateSortInUrl(sortKey);
+      loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers, true);
+    },
   };
 
-  try {
-    const result = await loadProducts(config, sortKey);
-
-    if (!result?.items?.length) {
-      block.replaceChildren(renderStatus(
-        'Unable to load products. Check the API Mesh GraphQL endpoint and mesh ID.',
-        true,
-      ));
-      return;
-    }
-
-    renderProducts(block, config.heading, result, config, sortKey, reloadProducts);
-  } catch {
-    block.replaceChildren(renderStatus('Unable to load products.', true));
-  }
+  await loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers);
 }
