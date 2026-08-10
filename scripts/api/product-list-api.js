@@ -129,6 +129,11 @@ export function buildPriceFilter(minPrice, maxPrice) {
   return { price };
 }
 
+function sanitizeText(value, maxLength = 500) {
+  if (value == null) return '';
+  return String(value).trim().slice(0, maxLength);
+}
+
 /**
  * Builds a Venia ProductAttributeFilterInput from selected filter state.
  * @param {object} selectedFilters selected filter state
@@ -313,11 +318,6 @@ export function resolveEffectiveGraphqlProxy(config) {
   }
 
   return '';
-}
-
-function sanitizeText(value, maxLength = 500) {
-  if (value == null) return '';
-  return String(value).trim().slice(0, maxLength);
 }
 
 function sanitizeUrl(value) {
@@ -719,7 +719,9 @@ export async function fetchProducts(
  * @param {object|null} [productFilter] Venia ProductAttributeFilterInput
  * @param {string} [sortKey] sort key
  * @param {number} [pageSize] max items to return
- * @returns {Promise<{ items: object[], totalCount: number, aggregations: object[], source: string }|null>}
+ * @returns {Promise<{
+ *   items: object[], totalCount: number, aggregations: object[], source: string
+ * }|null>}
  */
 export async function fetchProductsFromMock(
   mockEndpoint,

@@ -86,7 +86,8 @@ function isPriceFilterActive(selectedFilters, bounds) {
 }
 
 function hasActiveFilters(selectedFilters, priceBounds) {
-  const hasAttributes = Object.values(selectedFilters?.attributes || {}).some((values) => values.length);
+  const hasAttributes = Object.values(selectedFilters?.attributes || {})
+    .some((values) => values.length);
   return hasAttributes || isPriceFilterActive(selectedFilters, priceBounds);
 }
 
@@ -178,7 +179,9 @@ function createPriceRangeSlider(aggregation, selectedFilters, onChange) {
   slider.append(range, minInput, maxInput);
   container.append(values, slider);
 
-  const getPercent = (value) => Math.round(((value - bounds.min) / (bounds.max - bounds.min)) * 100);
+  const getPercent = (value) => Math.round(
+    ((value - bounds.min) / (bounds.max - bounds.min)) * 100,
+  );
 
   const updateRangeVisual = () => {
     const minVal = Number(minInput.value);

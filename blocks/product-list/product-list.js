@@ -332,7 +332,9 @@ function renderCatalog(block, config, result, selectedFilters, sortKey, handlers
   block.append(wrapper);
 }
 
-async function loadAndRenderCatalog(block, config, selectedFilters, sortKey, handlers, isReload = false) {
+async function loadAndRenderCatalog(
+  block, config, selectedFilters, sortKey, handlers, isReload = false,
+) {
   if (!isReload) {
     block.replaceChildren(renderStatus('Loading products...'));
   } else {
